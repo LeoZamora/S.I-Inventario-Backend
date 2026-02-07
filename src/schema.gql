@@ -1,0 +1,554 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccesoriosPerifericos {
+  fechaRegistro: DateTime!
+  idPeriferico: Int!
+  idProducto: Int!
+  idTipoConexion: Int!
+  observaciones: String
+  producto: Producto!
+  tipoConexion: TipoConexion!
+  usuarioRegistro: String!
+}
+
+type ArmasFuego {
+  capacidadCargador: Int!
+  fechaRegistro: DateTime!
+  idArma: Int!
+  idCalibre: Int!
+  idCalibre2: TipoCalibre!
+  idProducto: Int!
+  idSistemaDisparo: Int!
+  idSistemaDisparo2: SistemaDisparo!
+  idTipoArma: Int!
+  idTipoArma2: TipoArma!
+  licencia: Boolean!
+  longitudCanon: Float
+  material: String!
+  numSerie: String!
+  producto: Producto!
+  usuarioRegistro: String!
+}
+
+type Bodegas {
+  codigoBodega: String!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idBodega: Int!
+  idUbicacion: Int!
+  inventarios: [Inventario!]!
+  nombreBodega: String!
+  solicitudesComoSolicitada: [SolicitudesTraslado!]!
+  solicitudesComoSolicitante: [SolicitudesTraslado!]!
+  ubicacion: Ubicaciones!
+  usuarioRegistro: String!
+}
+
+type Categoria {
+  codigoSubCategoria: String!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idCategoria: Int!
+  nombreCategoria: String!
+  subCategorias: [SubCategoria!]!
+  usuarioRegistro: String!
+}
+
+type CategoriaImpresora {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idCategoriaImpresora: Int!
+  impresoras: [Impresoras!]!
+  nombreCategoria: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Departamento {
+  codigoDepartamento: String!
+  descripcion: String
+  estadoDepartamentos: [EstadoDepartamento!]!
+  fechaRegistro: DateTime!
+  idDepartamento: Int!
+  inventarios: [Inventario!]!
+  nombreDepartamento: String!
+  usuarioRegistro: String!
+}
+
+type DetalleDepreciacion {
+  aniosDepreciacion: Int!
+  costoActivo: Int!
+  depreciacionAnual: Int!
+  depreciacionMen: Int!
+  fechaRegistro: DateTime!
+  idDetalleDepreciacion: Int!
+  idProducto: Int!
+  producto: Producto!
+  valorLibro: Int!
+}
+
+type DetalleEntrada {
+  cantidad: Int!
+  idDetalleEntrada: Int!
+  idOrdenEntrada: Int!
+  idProducto: Int!
+  idProveedor: Int!
+  observaciones: String
+  ordenesEntrada: OrdenesEntrada!
+  producto: Producto!
+  proveedor: Proveedores!
+}
+
+type DetalleMovimientoInventario {
+  cantidad: Int!
+  idDetalleMovInv: Int!
+  idMovInv: Int!
+  idProducto: Int!
+  movimientoInventario: MovimientoInventario!
+  observaciones: String
+  precioUnitario: Float!
+  producto: Producto!
+}
+
+type DetalleSalida {
+  cantidad: Int!
+  idDetalleSalida: Int!
+  idOrden: Int!
+  idProducto: Int!
+  observaciones: String
+  orden: Ordenes!
+  precioUnitario: Float!
+  producto: Producto!
+}
+
+type DetalleSolicitud {
+  cantidad: Int!
+  idDetalleSolicitud: Int!
+  idProducto: Int!
+  idSolicitud: Int!
+  observaciones: String
+  precioUnitario: Float!
+  producto: Producto!
+  solicitud: SolicitudesTraslado!
+}
+
+type EquiposComputo {
+  cantidadAlm: Int!
+  fechaRegistro: DateTime!
+  idEquipoComputo: Int!
+  idProducto: Int!
+  idTipoAlmacenamiento: Int!
+  idTipoDispositivo: Int!
+  idTipoDispositivo2: TipoDispositivo!
+  procesador: String!
+  producto: Producto!
+  ramGB: Int!
+  tipoAlmacenamiento: TipoAlmacenamiento!
+  usuarioRegistro: String!
+}
+
+type EstadoDepartamento {
+  departamento: Departamento!
+  estados: Estados!
+  fechaAsignacion: DateTime!
+  idDepartamento: Int!
+  idEstado: Int!
+  idEstadoDepartamento: Int!
+  observaciones: String
+  usuarioRegistro: String!
+}
+
+type EstadoInventario {
+  estados: Estados!
+  fechaAsignacion: DateTime!
+  idEstado: Int!
+  idEstadoInventario: Int!
+  idInventario: Int!
+  inventario: Inventario!
+  observaciones: String
+  usuarioRegistro: String!
+}
+
+type EstadoOrden {
+  estados: Estados!
+  fechaRegistro: DateTime!
+  idEstado: Int!
+  idEstadoOrden: Int!
+  idOrden: Int!
+  observaciones: String
+  orden: Ordenes!
+  usuarioRegistro: String!
+}
+
+type EstadoOrdenEntrada {
+  estados: Estados!
+  fechaRegistro: DateTime!
+  idEstado: Int!
+  idEstadoOrden: Int!
+  idOrdenEntrada: Int!
+  observaciones: String
+  ordenEntrada: OrdenesEntrada!
+  usuarioRegistro: String!
+}
+
+type EstadoProducto {
+  estados: Estados!
+  fechaRegistro: DateTime!
+  idEstado: Int!
+  idEstadoProducto: Int!
+  idProducto: Int!
+  observaciones: String
+  producto: Producto!
+  usuarioRegistro: String!
+}
+
+type Estados {
+  codigoEstado: String!
+  descripcion: String
+  estadoDepartamentos: [EstadoDepartamento!]!
+  estadoInventarios: [EstadoInventario!]!
+  estadoOrden: [EstadoOrden!]!
+  estadoProductos: [EstadoProducto!]!
+  estadosSolicitud: [EstadosSolicitud!]!
+  fechaRegistro: DateTime!
+  idEstado: Int!
+  idTipoEstado: Int!
+  nombreEstado: Int!
+  tipoEstados: TipoEstados!
+}
+
+type EstadosSolicitud {
+  estados: Estados!
+  fechaRegistro: DateTime!
+  idEstado: Int!
+  idEstadoSolicitud: Int!
+  idSolicitud: Int!
+  observaciones: String
+  solicitud: SolicitudesTraslado!
+  usuarioRegistro: String!
+}
+
+type Impresoras {
+  categoriaImpresora: CategoriaImpresora!
+  color: String
+  fechaRegistro: DateTime!
+  idCategoriaImpresora: Int!
+  idImpresora: Int!
+  idProducto: Int!
+  idTipoConexion: Int!
+  idTipoImpresion: Int!
+  noSerie: String!
+  producto: Producto!
+  tipoConexion: TipoConexion!
+  tipoImpresion: TipoImpresora!
+  usuarioRegistro: String!
+}
+
+type Inventario {
+  bodegas: Bodegas
+  codigoInventario: String!
+  departamento: Departamento
+  estado: Int!
+  estadoInventarios: [EstadoInventario!]!
+  fechaRegistro: DateTime!
+  idBodega: Int
+  idDepartamento: Int
+  idInventario: Int!
+  inventarioCategoriasPermitidas: [InventarioCategoriasPermitidas!]!
+  inventarioProductos: [InventarioProducto!]!
+  nombreInventario: String!
+  observaciones: String
+  usuarioRegistro: String!
+}
+
+type InventarioCategoriasPermitidas {
+  fechaRegistro: DateTime!
+  idCategoriaPermitida: Int!
+  idInventario: Int!
+  idSubCategoria: Int!
+  inventario: Inventario!
+  observaciones: String
+  subCategoria: SubCategoria!
+}
+
+type InventarioProducto {
+  estado: Int!
+  fechaRegistro: DateTime!
+  idInventario: Int!
+  idProducto: Int!
+  idProductoInventario: Int!
+  inventario: Inventario!
+  producto: Producto!
+  stock: Int!
+  stockMax: Int!
+  stockMin: Int!
+  usuarioRegistro: String!
+}
+
+type Mobiliario {
+  acabado: String
+  color: String!
+  dimensiones: String!
+  fechaRegistro: DateTime!
+  idMobiliario: Int!
+  idProducto: Int!
+  material: String!
+  producto: Producto!
+  usoDestinado: String!
+  usuarioRegistro: String!
+}
+
+type MovimientoInventario {
+  detalleMovimientoInventarios: [DetalleMovimientoInventario!]!
+  fechaMovimiento: DateTime!
+  fechaRegistro: DateTime!
+  idMovInv: Int!
+  idOrden: Int
+  idOrdenEntrada: Int
+  idTipoMovimiento: Int!
+  observaciones: String
+  orden: Ordenes
+  tipoMovimiento: TipoMovimientoInventario!
+  usuarioRegistro: String!
+}
+
+type Ordenes {
+  codigoOrden: String!
+  detalleOrdens: [DetalleSalida!]!
+  estadoOrden: [EstadoOrden!]!
+  fechaEmision: DateTime!
+  fechaRegistro: DateTime!
+  idOrden: Int!
+  idSolicitud: Int!
+  idTipoOrden: Int!
+  movimientoInventario: [MovimientoInventario!]!
+  noReferencia: String
+  observaciones: String
+  solicitudes: SolicitudesTraslado!
+  tipoOrden: TipoOrdenes!
+  usuarioRegistro: String!
+}
+
+type OrdenesEntrada {
+  codigoOrden: String!
+  detalleEntrada: [DetalleEntrada!]!
+  estadosOrdenEntrada: [EstadoOrdenEntrada!]!
+  fechaOrden: DateTime!
+  fechaRegistro: DateTime!
+  idOrdenEntrada: Int!
+  idSolicitud: Int
+  noReferencia: String
+  observaciones: String
+  solicitud: SolicitudesTraslado
+  usuarioRegistro: String!
+}
+
+type Producto {
+  accesoriosPerifericos: [AccesoriosPerifericos!]!
+  armasFuegos: [ArmasFuego!]!
+  caracteristicasEspeciales: String
+  codigoProducto: String!
+  detalleDepreciacion: [DetalleDepreciacion!]!
+  detalleMovimientoInventarios: [DetalleMovimientoInventario!]!
+  detalleOrdens: [DetalleSalida!]!
+  equiposComputos: [EquiposComputo!]!
+  estadoProductos: [EstadoProducto!]!
+  fechaRegistro: DateTime!
+  fechaUltModificacion: DateTime!
+  idProducto: Int!
+  idSubCategoria: Int!
+  idTipoProducto: Int!
+  imagen: String
+  impresoras: [Impresoras!]!
+  inventarioProductos: [InventarioProducto!]!
+  marca: String!
+  mobiliarios: [Mobiliario!]!
+  modelo: String!
+  nombreProducto: String!
+  observaciones: String
+  precio: Float!
+  proveedores: [ProveedorProducto!]!
+  subCategoria: SubCategoria!
+  tipoProducto: TipoProducto!
+  usuarioRegistro: String!
+}
+
+type ProveedorProducto {
+  fechaRegistro: DateTime!
+  idDetProvProd: Int!
+  idProducto: Int!
+  idProveedor: Int!
+  observaciones: String
+  producto: Producto!
+  proveedor: Proveedores!
+  usuarioRegistro: String!
+}
+
+type Proveedores {
+  codigoProveedor: Int!
+  correo: String
+  detalleEntrada: [DetalleEntrada!]!
+  direccion: String!
+  estado: Boolean!
+  fechaRegistro: DateTime!
+  idProveedor: Int!
+  nombreComercial: String
+  nombreProveedor: String!
+  observaciones: String
+  proveedor: [ProveedorProducto!]!
+  ruc: String
+  telefono: String!
+  usuarioRegistro: String!
+}
+
+type Query {
+  finProductos: [Producto!]!
+  hello: String!
+}
+
+type SistemaDisparo {
+  armasFuegos: [ArmasFuego!]!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idSistemaDisparo: Int!
+  nombre: String!
+}
+
+type SolicitudesTraslado {
+  bodegaSolicitada: Bodegas!
+  bodegaSolicitante: Bodegas!
+  codigoSolicitud: String!
+  detalleSolicitud: [DetalleSolicitud!]!
+  estadoSolicitud: [EstadosSolicitud!]!
+  fechaRegistro: DateTime!
+  idBodegaSolicitada: Int!
+  idBodegaSolicitante: Int!
+  idSolicitud: Int!
+  idTipoSolicitud: Int!
+  motivo: String!
+  observaciones: String
+  orden: [Ordenes!]!
+  ordenesEntrada: [OrdenesEntrada!]!
+  solicitante: String!
+  tipoSolicitud: TipoSolicitud!
+  usuarioRegistro: String!
+}
+
+type SubCategoria {
+  categoria: Categoria!
+  codigoSubCategoria: String!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idCategoria: Int!
+  idSubCategoria: Int!
+  inventarioCategoriasPermitidas: [InventarioCategoriasPermitidas!]!
+  nombre: String!
+  productos: [Producto!]!
+  usuarioRegistro: String!
+}
+
+type TipoAlmacenamiento {
+  descripcion: String
+  equiposComputos: [EquiposComputo!]!
+  fechaRegistro: DateTime!
+  idTipoAlmacenamiento: Int!
+  nombre: String!
+}
+
+type TipoArma {
+  armasFuegos: [ArmasFuego!]!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoArma: Int!
+  nombre: String!
+}
+
+type TipoCalibre {
+  armasFuegos: [ArmasFuego!]!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idCalibre: Int!
+  nombre: String!
+}
+
+type TipoConexion {
+  accesoriosPerifericos: [AccesoriosPerifericos!]!
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoConexion: Int!
+  impresoras: [Impresoras!]!
+  nombre: String!
+}
+
+type TipoDispositivo {
+  descripcion: String
+  equiposComputos: [EquiposComputo!]!
+  fechaRegistro: DateTime!
+  idTipoDispositivo: Int!
+  nombre: String!
+}
+
+type TipoEstados {
+  codigoEstados: String!
+  codigoTipoEstado: String!
+  descripcion: String
+  estados: [Estados!]!
+  fechaRegistro: DateTime!
+  idTipoEstado: Int!
+  nombreTipoEstado: String!
+}
+
+type TipoImpresora {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoImpresion: Int!
+  impresoras: [Impresoras!]!
+  nombre: String!
+}
+
+type TipoMovimientoInventario {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoMovimiento: Int!
+  movimientoInventarios: [MovimientoInventario!]!
+  nombreMovimiento: String!
+}
+
+type TipoOrdenes {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoOrden: Int!
+  nombre: String!
+  ordenes: [Ordenes!]!
+}
+
+type TipoProducto {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoProducto: Int!
+  nombre: String!
+  productos: [Producto!]!
+}
+
+type TipoSolicitud {
+  descripcion: String
+  fechaRegistro: DateTime!
+  idTipoSolicitud: Int!
+  nombre: String!
+  solicitudesTraslado: [SolicitudesTraslado!]!
+}
+
+type Ubicaciones {
+  bodegas: [Bodegas!]!
+  codigoUbicacion: String!
+  direccion: String
+  fechaRegistro: DateTime!
+  idUbicacion: Int!
+  nombreUbicacion: String!
+  usuarioRegistro: String!
+}

@@ -21,33 +21,35 @@ export class ProductosServices {
         private tipoProductoRepository: Repository<TipoProducto>
     ) {}
 
-    async findAllProds(): Promise<any> {
+    async findAllProds(): Promise<Producto[]> {
         const productos = await this.productoRepository.find({
-            relations: [
-                'inventarioProductos',
-                'subCategoria.categoria',
-            ],
-            order: { idProducto: "ASC" }
+            // relations: [
+            //     'inventarioProductos',
+            //     'subCategoria.categoria',
+            // ],
+            // order: { idProducto: "ASC" }
         })
 
-        return productos.map(producto => {
-            return {
-                idProducto: producto.idProducto,
-                codigoProducto: producto.codigoProducto,
-                nombreProducto: producto.nombreProducto,
-                subCategoria: producto.subCategoria.nombre,
-                idSubCategoria: producto.subCategoria.idSubCategoria,
-                categoria: producto.subCategoria.categoria.nombreCategoria,
-                idCategoria: producto.subCategoria.categoria.idCategoria,
-                marca: producto.marca,
-                modelo: producto.modelo,
-                precio: producto.precio,
-                stock: producto.inventarioProductos[0]?.stock,
-                stockMin: producto.inventarioProductos[0]?.stockMin,
-                stockMax: producto.inventarioProductos[0]?.stockMax,
-                estado: producto.inventarioProductos[0]?.estado,
-            }
-        });
+        return productos
+
+        // return productos.map(producto => {
+        //     return {
+        //         idProducto: producto.idProducto,
+        //         codigoProducto: producto.codigoProducto,
+        //         nombreProducto: producto.nombreProducto,
+        //         subCategoria: producto.subCategoria.nombre,
+        //         idSubCategoria: producto.subCategoria.idSubCategoria,
+        //         categoria: producto.subCategoria.categoria.nombreCategoria,
+        //         idCategoria: producto.subCategoria.categoria.idCategoria,
+        //         marca: producto.marca,
+        //         modelo: producto.modelo,
+        //         precio: producto.precio,
+        //         stock: producto.inventarioProductos[0]?.stock,
+        //         stockMin: producto.inventarioProductos[0]?.stockMin,
+        //         stockMax: producto.inventarioProductos[0]?.stockMax,
+        //         estado: producto.inventarioProductos[0]?.estado,
+        //     }
+        // });
     }
 
     async createProducto(producto: productoDTO) {
