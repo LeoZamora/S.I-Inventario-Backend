@@ -7,6 +7,7 @@ import { DepartamentoModule } from './modules/departamento/Departamento.module';
 import { ProveedoresModule } from './modules/proveedores/Proveedore.module';
 import { CatalogModule } from './modules/catalog/Catalog.module';
 import { MovimientosModule } from './modules/movimientos/Movimientos.module';
+import { PostsResolver } from './posts/posts.resolver';
 
 const importsModules = [
   ProductoModule,
@@ -26,6 +27,7 @@ const importsModules = [
 
   providers: [
     ConfigModule,
+    PostsResolver,
   ],
 
   exports: [

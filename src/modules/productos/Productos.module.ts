@@ -7,6 +7,7 @@ import { ArmasController, EquiposComputoController, ProductosController } from "
 import { InventarioModule } from "../inventario/Inventario.module";
 import { CatalogModule } from "../catalog/Catalog.module";
 import { ProductosUtilsServices } from "./services/productoUtils.service";
+import { ProductosResolvers } from "./resolvers/productos.resolver";
 
 @Module({
     imports: [
@@ -16,14 +17,15 @@ import { ProductosUtilsServices } from "./services/productoUtils.service";
     controllers: [
         ProductosController,
         ArmasController,
-        EquiposComputoController
+        EquiposComputoController,
     ],
     providers: [
         ...productoProviders,
         ...catalogArmasProviders,
         ...catalogCompProviders,
         ProductosServices,
-        ProductosUtilsServices
+        ProductosUtilsServices,
+        ProductosResolvers
     ],
     exports: [
         ProductosServices,
