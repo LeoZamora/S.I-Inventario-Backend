@@ -6,12 +6,14 @@ import { EstadoInventario } from "../entities/EstadoInventario.entity";
 import { InventarioCategoriasPermitidas } from "../entities/InventarioCategoriasPermitidas.entity";
 import { InventarioProducto } from "../entities/InventarioProducto.entity";
 import { MovimientoInventario } from "src/modules/movimientos/entities/MovimientoInventario.entity";
-import { TipoMovimientoInventario } from "../entities/TipoMovimientoInventario.entity";
+import { TipoMovimientoInventario } from "../../movimientos/entities/TipoMovimientoInventario.entity";
+import { Ubicaciones } from "../entities/Ubicaciones.entity";
 
 const TOKENS = {
     DATA_SOURCE: 'DATA_SOURCE',
     INVENTARIO_PROVIDE: 'INVENTARIO_PROVIDE',
     BODEGAS_PROVIDE: 'BODEGAS_PROVIDE',
+    UBICACION_PROVIDE: 'UBICACION_PROVIDE',
     DETMOVINV_PROVIDE: 'DETMOVINV_PROVIDE',
     ESTADOINV_PROVIDE: 'ESTADOINV_PROVIDE',
     INVCATPERM_PROVIDE: 'INVCATPERM_PROVIDE',
@@ -60,6 +62,11 @@ export const inventarioProviders = [
     {
         provide: TOKENS.TIPOINVENT_PROVIDE,
         useFactory: (datasSource: DataSource) => datasSource.getRepository(TipoMovimientoInventario),
+        inject: [TOKENS.DATA_SOURCE]
+    },
+    {
+        provide: TOKENS.UBICACION_PROVIDE,
+        useFactory: (datasSource: DataSource) => datasSource.getRepository(Ubicaciones),
         inject: [TOKENS.DATA_SOURCE]
     }
 ]

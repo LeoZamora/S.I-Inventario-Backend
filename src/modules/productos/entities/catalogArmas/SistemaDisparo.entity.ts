@@ -14,7 +14,7 @@ export class SistemaDisparo {
   idSistemaDisparo: number;
 
   @Column("varchar", { name: "nombreSistema", length: 100 })
-  nombreSistema: string;
+  nombre: string;
 
   @Column("varchar", { name: "descripcion", nullable: true, length: 100 })
   descripcion: string | null;

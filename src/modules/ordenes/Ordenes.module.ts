@@ -9,7 +9,8 @@ import { CatalogModule } from "../catalog/Catalog.module";
         CatalogModule
     ],
     controllers: [
-        OrdenesController
+        OrdenesController,
+        // OrdenesEntradaController
     ],
     providers: [
         ...ordenesProviders,

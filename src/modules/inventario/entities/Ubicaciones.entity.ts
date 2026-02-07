@@ -14,7 +14,7 @@ export class Ubicaciones {
   @PrimaryGeneratedColumn({ type: "int", name: "idUbicacion" })
   idUbicacion: number;
 
-  @Column("varchar", { name: "codigoUbicacion", unique: true, length: 50 })
+  @Column("nvarchar", { name: "codigoUbicacion", unique: true, length: 50 })
   codigoUbicacion: string;
 
   @Column("varchar", { name: "nombreUbicacion", length: 300 })

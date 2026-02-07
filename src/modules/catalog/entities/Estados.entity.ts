@@ -15,11 +15,15 @@ import { TipoEstados } from "./TipoEstados.entity";
 import { EstadosSolicitud } from '../../movimientos/entities/EstadoSolicitud.entity';
 
 @Index("IX_Estados_TipoEstados", ["idTipoEstado"], {})
+@Index("UQ_codigoEstado", ["codigoEstado"], { unique: true })
 @Index("PK_Estados", ["idEstado"], { unique: true })
 @Entity("Estados", { schema: "dbo" })
 export class Estados {
   @PrimaryGeneratedColumn({ type: "int", name: "idEstado" })
   idEstado: number;
+
+  @Column("varchar", { name: "codigoEstado", length: 50 })
+  codigoEstado: string;
 
   @Column("varchar", { name: "nombreEstado", length: 50 })
   nombreEstado: string;

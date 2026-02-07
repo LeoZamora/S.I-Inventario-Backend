@@ -18,7 +18,8 @@ export class Enviroments {
             dbUser: process.env.DB_USER || 'sa',
             dbPass: process.env.DB_PASS || 'Leozamora05*',
             dbName: process.env.DB_NAME || 'SIGUNI',
-            dbServer: process.env.DB_HOST || '127.0.0.0',
+            dbServer: '127.0.0.1',
+            // dbServer: process.env.DB_HOST || 'host.docker.internal',
             jwtKey: process.env.JWT_KEY || 'leozamora.*',
             dbPort: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 1433,
         }

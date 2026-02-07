@@ -30,10 +30,10 @@ export class subCategoriaDTO {
     @IsString({ message: 'El nombre debe ser un texto' })
     nombre: string;
 
-    @ApiProperty({ example: 'SUBEC001', maxLength: 100 })
-    @IsNotEmpty({message: 'el codigo es en obligatorio'})
-    @IsString({ message: 'El codigo debe ser un texto' })
-    codigoSubCategoria: string;
+    // @ApiProperty({ example: 'SUBEC001', maxLength: 100 })
+    // @IsNotEmpty({message: 'el codigo es en obligatorio'})
+    // @IsString({ message: 'El codigo debe ser un texto' })
+    // codigoSubCategoria: string;
 
     @ApiProperty({ example: 'Laptops, pc, tablets, telefono...' })
     @IsOptional()

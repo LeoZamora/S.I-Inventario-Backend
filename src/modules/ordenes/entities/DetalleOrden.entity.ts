@@ -7,13 +7,13 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Producto } from "../../productos/entities/Producto.entity";
-import { OrdenesSalida } from "./OrdenesSalida.entity";
+import { Ordenes } from "./Ordenes.entity";
 
-@Index("PK_DetalleOrden", ["idDetalleOrden"], { unique: true })
+@Index("PK_DetalleOrden", ["idDetalleSalida"], { unique: true })
 @Entity("DetalleSalida", { schema: "dbo" })
 export class DetalleSalida {
-  @PrimaryGeneratedColumn({ type: "int", name: "idDetalleOrden" })
-  idDetalleOrden: number;
+  @PrimaryGeneratedColumn({ type: "int", name: "idDetalleSalida" })
+  idDetalleSalida: number;
 
   @Column("int", { name: "cantidad", default: () => "(1)" })
   cantidad: number;
@@ -32,14 +32,14 @@ export class DetalleSalida {
   @Column("int", { name: 'idProducto' })
   idProducto: number
 
-  @Column("int", { name: 'idOrdenSalida' })
-  idOrdenSalida: number
+  @Column("int", { name: 'idOrden' })
+  idOrden: number
 
   @ManyToOne(() => Producto, (producto) => producto.detalleOrdens)
   @JoinColumn([{ name: "idProducto", referencedColumnName: "idProducto" }])
   producto: Producto;
 
-  @ManyToOne(() => OrdenesSalida, (ordenes) => ordenes.detalleOrdens)
-  @JoinColumn([{ name: "idOrdenSalida", referencedColumnName: "idOrdenSalida" }])
-  orden: OrdenesSalida;
+  @ManyToOne(() => Ordenes, (ordenes) => ordenes.detalleOrdens)
+  @JoinColumn([{ name: "idOrden", referencedColumnName: "idOrden" }])
+  orden: Ordenes;
 }

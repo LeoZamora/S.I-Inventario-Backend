@@ -16,7 +16,7 @@ export class InventarioController {
     ) {}
 
     @Get()
-    @ApiOperation({ 
+    @ApiOperation({
         summary: 'Inventarios registrados',
     })
     async findAll() {
@@ -38,5 +38,19 @@ export class InventarioController {
         @Body() body: inventarioDTO,
     ) {
         return await this.inventarioServices.createInventario(body)
+    }
+
+    @Get('/codigo-recomendado')
+    @ApiOperation({ summary: 'Obtener un código recomendado para en base al tipo de estado' })
+    async getCodigoRecomendado() {
+        return (await this.inventarioServices.getCodigoRecomendado());
+    }
+
+    @Get('/productos')
+    @ApiOperation({
+        summary: 'Control de inventario cargado',
+    })
+    async findInvenProd() {
+        return (await this.inventarioServices.findInventarioProducto())
     }
 }

@@ -8,9 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { DetalleMovimientoInventario } from "src/modules/movimientos/entities/DetalleMovimientoInventario.entity";
-import { TipoMovimientoInventario } from "src/modules/inventario/entities/TipoMovimientoInventario.entity";
-import { OrdenesSalida } from "src/modules/ordenes/entities/OrdenesSalida.entity";
-import { OrdenesEntrada } from "src/modules/ordenes/entities/OrdenesEntrada.entity";
+import { TipoMovimientoInventario } from "src/modules/movimientos/entities/TipoMovimientoInventario.entity";
+import { Ordenes } from "src/modules/ordenes/entities/Ordenes.entity";
 
 @Index("IX_MovimientoInventario_TipoMovimiento", ["idTipoMovimiento"], {})
 @Index("PK_MovimientoInventario", ["idMovInv"], { unique: true })
@@ -31,8 +30,8 @@ export class MovimientoInventario {
   @Column("int", { name: "idTipoMovimiento" })
   idTipoMovimiento: number;
 
-  @Column("int", { name: "idOrdenSalida", nullable: true })
-  idOrdenSalida: number;
+  @Column("int", { name: "idOrden", nullable: true })
+  idOrden: number;
 
   @Column("int", { name: "idOrdenEntrada", nullable: true })
   idOrdenEntrada: number | null;
@@ -56,20 +55,11 @@ export class MovimientoInventario {
   tipoMovimiento: TipoMovimientoInventario;
 
   @ManyToOne(
-    () => OrdenesSalida,
+    () => Ordenes,
     (ordenes) => ordenes.movimientoInventario
   )
   @JoinColumn([
-    { name: "idOrdenSalida", referencedColumnName: "idOrdenSalida" },
+    { name: "idOrden", referencedColumnName: "idOrden" },
   ])
-  orden: OrdenesSalida;
-
-  @ManyToOne(
-    () => OrdenesEntrada,
-    (ordenes) => ordenes.movimiento
-  )
-  @JoinColumn([
-    { name: "idOrdenEntrada", referencedColumnName: "idOrdenEntrada" },
-  ])
-  ordenesEntrada: OrdenesEntrada;
+  orden: Ordenes;
 }

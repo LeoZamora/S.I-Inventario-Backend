@@ -38,7 +38,53 @@ export class detalleOrdenDTO {
     observaciones: string | null
 }
 
-export class ordenSalidaDTO {
+export class ordenDTO {
+    @ApiProperty({ maxLength: 50 })
+    @IsString({ message: 'El codigo debe ser un texto' })
+    @IsNotEmpty({ message: 'El codigo es obligatorio' })
+    @MaxLength(50)
+    codigoOrden: string
+
+    @ApiProperty()
+    @ValidateIf((_, value) => value !== null)
+    @IsString({ message: 'El noReferencia debe ser un texto' })
+    noReferencia: string | null
+
+    @ApiProperty()
+    @ValidateIf((_, value) => value !== null)
+    @IsString({ message: 'Las observaciones deben ser un texto' })
+    observaciones: string | null
+
+    @ApiProperty({ minLength: 1 })
+    @IsNumber({}, { message: 'Ingrese el id de la solicitud' })
+    idSolicitud: number;
+
+    @ApiProperty({ minLength: 1 })
+    @IsNumber({}, { message: 'Ingrese el id del tipo de orden' })
+    idTipoOrden: number;
+
+    @ApiProperty()
+    @Type(() => Date)
+    @IsNotEmpty({ message: 'La fecha de emision es obligatoria' })
+    @IsDate({ message: 'La fecha de emision debe ser de tipo date' })
+    fechaEmision: Date
+
+    @ApiProperty({ maxLength: 50 })
+    @MaxLength(50)
+    @IsString({ message: 'El usuario de registro debe ser texto' })
+    @IsNotEmpty({ message: 'El usuario de registro es obligatorio' })
+    usuarioRegistro: string;
+
+    @ApiProperty({ type: [detalleOrdenDTO] })
+    @IsNotEmpty({ message: 'Los detalles son obligatorios' })
+    @IsArray({ message: 'Tiene que agregar uno o mas detalles en un arreglo' })
+    @ArrayMinSize(1, { message: 'Debe agregar al menos un detalle' })
+    @ValidateNested({ each: true })
+    @Type(() => detalleOrdenDTO)
+    detalleOrden: detalleOrdenDTO[]
+}
+
+export class ordenEntradaDTO {
     @ApiProperty({ maxLength: 50 })
     @IsString({ message: 'El codigo debe ser un texto' })
     @IsNotEmpty({ message: 'El codigo es obligatorio' })
@@ -50,15 +96,22 @@ export class ordenSalidaDTO {
     @IsString({ message: 'Las observaciones deben ser un texto' })
     observaciones: string | null
 
+    @ApiProperty()
+    @ValidateIf((_, value) => value !== null)
+    @IsString({ message: 'El noReferencia debe ser un texto' })
+    noReferencia: string | null
+
     @ApiProperty({ minLength: 1 })
+    @IsOptional()
+    @ValidateIf((_, value) => value !== null)
     @IsNumber({}, { message: 'Ingrese el id de la solicitud' })
-    idSolicitud: number;
+    idSolicitud: number | null;
 
     @ApiProperty()
     @Type(() => Date)
-    @IsNotEmpty({ message: 'La fecha de emision es obligatoria' })
-    @IsDate({ message: 'La fecha de emision debe ser de tipo date' })
-    fechaEmision: Date
+    @IsNotEmpty({ message: 'La fecha de orden es obligatoria' })
+    @IsDate({ message: 'La fecha de orden debe ser de tipo date' })
+    fechaOrden: Date
 
     @ApiProperty({ maxLength: 50 })
     @MaxLength(50)

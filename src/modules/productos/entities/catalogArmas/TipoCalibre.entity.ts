@@ -14,7 +14,7 @@ export class TipoCalibre {
   idCalibre: number;
 
   @Column("varchar", { name: "nombreCalibre", length: 50 })
-  nombreCalibre: string;
+  nombre: string;
 
   @Column("varchar", { name: "descripcion", nullable: true, length: 100 })
   descripcion: string | null;

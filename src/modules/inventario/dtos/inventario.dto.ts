@@ -24,7 +24,7 @@ export class inventarioDTO {
     @ApiProperty({ nullable: true })
     @IsOptional()
     @IsString({ message: 'Las observaciones deben ser texto' })
-    observaciones: string;
+    observaciones: string | null;
 
     @ApiProperty({ maxLength: 50 })
     @IsString({ message: 'El usuario de registro debe ser texto' })

@@ -3,7 +3,7 @@ import { productoProviders } from "./providers/producto.providers";
 import { catalogArmasProviders } from "./providers/catalogArmasProd.providers";
 import { catalogCompProviders } from "./providers/catalogCompProd.providers";
 import { ProductosServices } from "./services/productos.service";
-import { ProductosController } from "./controllers/producto.controller";
+import { ArmasController, EquiposComputoController, ProductosController } from "./controllers/producto.controller";
 import { InventarioModule } from "../inventario/Inventario.module";
 import { CatalogModule } from "../catalog/Catalog.module";
 import { ProductosUtilsServices } from "./services/productoUtils.service";
@@ -14,7 +14,9 @@ import { ProductosUtilsServices } from "./services/productoUtils.service";
         CatalogModule,
     ],
     controllers: [
-        ProductosController
+        ProductosController,
+        ArmasController,
+        EquiposComputoController
     ],
     providers: [
         ...productoProviders,

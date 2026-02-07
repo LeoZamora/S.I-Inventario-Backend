@@ -11,22 +11,29 @@ import { DetalleSalida } from "./DetalleOrden.entity";
 import { EstadoOrden } from './EstadoOrden.entity';
 import { MovimientoInventario } from "src/modules/movimientos/entities/MovimientoInventario.entity";
 import { SolicitudesTraslado } from '../../movimientos/entities/SolicitudesTraslado.entity';
+import { TipoOrdenes } from "./TipoOrden.entity";
 
-@Index("PK_Ordenes", ["idOrdenSalida"], { unique: true })
+@Index("PK_Ordenes", ["idOrden"], { unique: true })
 @Index("UQ_codigoOrden", ["codigoOrden"], { unique: true })
-@Entity("OrdenesSalida", { schema: "dbo" })
-export class OrdenesSalida {
-  @PrimaryGeneratedColumn({ type: "int", name: "idOrdenSalida" })
-  idOrdenSalida: number;
+@Entity("Ordenes", { schema: "dbo" })
+export class Ordenes {
+  @PrimaryGeneratedColumn({ type: "int", name: "idOrden" })
+  idOrden: number;
 
   @Column("nvarchar", { name: "codigoOrden", unique: true, length: 50 })
   codigoOrden: string;
+
+  @Column("nvarchar", { name: 'noReferencia', length: 50, nullable: true })
+  noReferencia: string | null
 
   @Column("varchar", { name: "observaciones", nullable: true, length: 50 })
   observaciones: string | null;
 
   @Column("int", { name: "idSolicitud"})
   idSolicitud: number;
+
+  @Column("int", { name: "idTipoOrden"})
+  idTipoOrden: number;
 
   @Column("datetime2", { name: "fechaEmision", default: () => "getdate()" })
   fechaEmision: Date;
@@ -39,12 +46,21 @@ export class OrdenesSalida {
 
   @ManyToOne(
     () => SolicitudesTraslado,
-    (solicitud) => solicitud.ordenesSalida
+    (solicitud) => solicitud.orden
   )
   @JoinColumn([
     { name: "idSolicitud", referencedColumnName: "idSolicitud" },
   ])
   solicitudes: SolicitudesTraslado;
+
+  @ManyToOne(
+    () => TipoOrdenes,
+    (solicitud) => solicitud.ordenes
+  )
+  @JoinColumn([
+    { name: "idTipoOrden", referencedColumnName: "idTipoOrden" },
+  ])
+  tipoOrden: SolicitudesTraslado;
 
   @OneToMany(() => DetalleSalida, (detalleOrden) => detalleOrden.orden)
   detalleOrdens: DetalleSalida[];

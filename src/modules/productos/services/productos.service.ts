@@ -5,6 +5,8 @@ import { Inventario } from "src/modules/inventario/entities/Inventario.entity";
 import { Producto } from "../entities/Producto.entity";
 import { productoDTO } from "../dtos/producto.dto";
 import { DataSource, Repository } from "typeorm";
+import { TipoProducto } from "../entities/TipoProducto.entity";
+import { tipoCompDTO } from "../dtos/tipoInfo.dto";
 
 @Injectable()
 export class ProductosServices {
@@ -13,7 +15,10 @@ export class ProductosServices {
         private productoRepository: Repository<Producto>,
 
         @Inject('DATA_SOURCE')
-        private dataSource: DataSource
+        private dataSource: DataSource,
+
+        @Inject('TIPOPROD_PROVIDE')
+        private tipoProductoRepository: Repository<TipoProducto>
     ) {}
 
     async findAllProds(): Promise<any> {
@@ -123,6 +128,58 @@ export class ProductosServices {
             );
         } finally {
             await queryRunner.release();
+        }
+    }
+
+    async getCodigoRecomendado(): Promise<string> {
+        const ultimoRegistro = await this.productoRepository.find({
+            order: {
+                idProducto: 'DESC'
+            },
+            take: 1
+        });
+
+        if (ultimoRegistro.length > 0) {
+            const ultimoId = ultimoRegistro[0].idProducto;
+            const nuevoId = ultimoId + 1;
+            return `PROD_${nuevoId.toString().padStart(4, '0')}`;
+        }
+
+        return `PROD_0001`;
+    }
+
+
+    async findTipoProducto(): Promise<TipoProducto[]> {
+        return (await this.tipoProductoRepository.find())
+    }
+
+    async createTipoProducto(tipo: tipoCompDTO) {
+        const exist = await this.tipoProductoRepository.findOne({
+            where: { nombre: tipo.nombre }
+        })
+
+        if (exist) {
+            throw new BadRequestException(
+                'Ya existe este tipo de producto'
+            )
+        }
+
+        try {
+            const newTipoAlm = this.tipoProductoRepository.create(tipo)
+            await this.tipoProductoRepository.save(newTipoAlm)
+
+            return {
+                code: 200,
+                msg: 'Tipo de producto creado exitosamente'
+            }
+        } catch (error) {
+            if (error instanceof BadRequestException) {
+                throw error
+            }
+
+            throw new InternalServerErrorException(
+                `Error al crear el registro: ${error.message}`
+            );
         }
     }
 }
