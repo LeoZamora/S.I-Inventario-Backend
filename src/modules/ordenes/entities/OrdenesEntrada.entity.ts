@@ -14,15 +14,15 @@ import { DetalleEntrada } from "./DetalleCompra.entity";
 import { MovimientoInventario } from "src/modules/movimientos/entities/MovimientoInventario.entity";
 import { EstadoOrdenEntrada } from "./EstadoOrdenEntrada.entity";
 
-@Unique(['codigoCompra'])
+@Unique(['codigoOrden'])
 @Index("PK_OrdenesEntrada", ["idOrdenEntrada"], { unique: true })
 @Entity('OrdenesEntrada', { schema: 'dbo' })
 export class OrdenesEntrada {
     @PrimaryGeneratedColumn({ type: "int", name: 'idOrdenEntrada' })
     idOrdenEntrada: number
 
-    @Column("nvarchar", { name: 'codigoCompra', length: 50 })
-    codigoCompra: string
+    @Column("nvarchar", { name: 'codigoOrden', length: 50, unique: true })
+    codigoOrden: string
 
     @Column("nvarchar", { name: 'noReferencia', length: 50, nullable: true })
     noReferencia: string | null
@@ -30,14 +30,17 @@ export class OrdenesEntrada {
     @Column('varchar', { name: 'observaciones', nullable: true })
     observaciones: string | null
 
+    @Column("datetime2", { name: "fechaOrden", default: () => "getdate()" })
+    fechaOrden: Date;
+
     @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
     fechaRegistro: Date;
 
     @Column("varchar", { name: "usuarioRegistro", length: 50 })
     usuarioRegistro: string;
 
-    @Column("int", { name: "idSolicitud" })
-    idSolicitud: number;
+    @Column("int", { name: "idSolicitud", nullable: true })
+    idSolicitud: number | null;
 
     @ManyToOne(() => SolicitudesTraslado, (solicitud) => solicitud.ordenesEntrada)
     @JoinColumn([{ name: "idSolicitud", referencedColumnName: "idSolicitud" }])
@@ -45,9 +48,6 @@ export class OrdenesEntrada {
 
     @OneToMany(() => DetalleEntrada, (detalleOrden) => detalleOrden.ordenesEntrada)
     detalleEntrada: DetalleEntrada[];
-
-    @OneToMany(() => MovimientoInventario, (movimiento) => movimiento.ordenesEntrada)
-    movimiento: MovimientoInventario[];
 
     @OneToMany(() => EstadoOrdenEntrada, (estado) => estado.ordenEntrada)
     estadosOrdenEntrada: EstadoOrdenEntrada[];

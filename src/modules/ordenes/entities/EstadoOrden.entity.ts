@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Estados } from "../../catalog/entities/Estados.entity";
-import { OrdenesSalida } from "./OrdenesSalida.entity";
+import { Ordenes } from "./Ordenes.entity";
 
 @Index("IX_EstadoOrden_Estados", ["idEstado"], {})
-@Index("IX_EstadoOrden_Ordenes", ["idOrdenSalida"], {})
+@Index("IX_EstadoOrden_Ordenes", ["idOrden"], {})
 @Index("PK_EstadoOrden", ["idEstadoOrden"], { unique: true })
 @Entity("EstadoOrden", { schema: "dbo" })
 export class EstadoOrden {
@@ -26,8 +26,8 @@ export class EstadoOrden {
   @Column("int", { name: "idEstado" })
   idEstado: number;
 
-  @Column("int", { name: "idOrdenSalida" })
-  idOrdenSalida: number;
+  @Column("int", { name: "idOrden" })
+  idOrden: number;
 
   @Column("varchar", { name: "usuarioRegistro", length: 50 })
   usuarioRegistro: string;
@@ -36,7 +36,7 @@ export class EstadoOrden {
   @JoinColumn([{ name: "idEstado", referencedColumnName: "idEstado" }])
   estados: Estados;
 
-  @ManyToOne(() => OrdenesSalida, (ordenes) => ordenes.estadoOrden)
-  @JoinColumn([{ name: "idOrdenSalida", referencedColumnName: "idOrdenSalida" }])
-  orden: OrdenesSalida;
+  @ManyToOne(() => Ordenes, (ordenes) => ordenes.estadoOrden)
+  @JoinColumn([{ name: "idOrden", referencedColumnName: "idOrden" }])
+  orden: Ordenes;
 }

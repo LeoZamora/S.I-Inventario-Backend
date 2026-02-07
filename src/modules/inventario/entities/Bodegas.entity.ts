@@ -18,13 +18,13 @@ export class Bodegas {
   @PrimaryGeneratedColumn({ type: "int", name: "idBodega" })
   idBodega: number;
 
-  @Column("varchar", { name: "codigoBodega", unique: true, length: 50 })
+  @Column("nvarchar", { name: "codigoBodega", unique: true, length: 50 })
   codigoBodega: string;
 
   @Column("varchar", { name: "nombreBodega", length: 50 })
   nombreBodega: string;
 
-  @Column("varchar", { name: "descripcion", nullable: true, length: 50 })
+  @Column("varchar", { name: "descripcion", nullable: true })
   descripcion: string | null;
 
   @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
@@ -43,6 +43,9 @@ export class Bodegas {
   @OneToMany(() => Inventario, (inventario) => inventario.bodegas)
   inventarios: Inventario[];
 
-  @OneToMany(() => SolicitudesTraslado, (solicitud) => solicitud.bodega)
-  solicitudes: SolicitudesTraslado[];
+  @OneToMany(() => SolicitudesTraslado, (solicitud) => solicitud.bodegaSolicitada)
+  solicitudesComoSolicitada: SolicitudesTraslado[];
+
+  @OneToMany(() => SolicitudesTraslado, (solicitud) => solicitud.bodegaSolicitante)
+  solicitudesComoSolicitante: SolicitudesTraslado[];
 }

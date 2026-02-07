@@ -32,7 +32,7 @@ export class Server {
 
         const document = SwaggerModule.createDocument(app, configSwagger)
         SwaggerModule.setup('api', app, document, {
-            customSiteTitle: 'SI-INVENTARIO'
+            customSiteTitle: 'SI-INVENTARIO',
         })
 
         app.use(helmet())
@@ -53,7 +53,7 @@ export class Server {
 
         await app.listen(port ?? 3011);
 
-        console.log(`- Server is running on http://localhost:${port}`);
+        console.log(`- Server is running on http://localhost:${port}/api`);
         console.log(`- Swagger disponible en: http://localhost:${port}/api`);
     }
 }

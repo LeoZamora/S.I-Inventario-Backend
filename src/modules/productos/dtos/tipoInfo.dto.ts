@@ -19,3 +19,15 @@ export class tipoCompDTO {
     @IsString({ message: 'La descripcion debe ser un texto' })
     descripcion: string | null
 }
+
+export class catImpresoraDTO {
+    @ApiProperty({ maxLength: 50 })
+    @IsNotEmpty({ message: 'El nombre es obligatorio' })
+    @IsString({ message: 'El nombre debe ser un texto' })
+    nombreCategoria: string
+
+    @ApiProperty({ maxLength: 300 })
+    @IsOptional()
+    @IsString({ message: 'La descripcion debe ser un texto' })
+    descripcion: string | null
+}

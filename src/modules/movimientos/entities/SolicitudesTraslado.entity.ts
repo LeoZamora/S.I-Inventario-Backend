@@ -11,9 +11,11 @@ import {
 import { Bodegas } from "../../inventario/entities/Bodegas.entity";
 import { EstadosSolicitud } from './EstadoSolicitud.entity';
 import { OrdenesEntrada } from "src/modules/ordenes/entities/OrdenesEntrada.entity";
-import { OrdenesSalida } from "src/modules/ordenes/entities/OrdenesSalida.entity";
+import { Ordenes } from "src/modules/ordenes/entities/Ordenes.entity";
+import { DetalleSolicitud } from "./DetalleSolicitud.entity";
+import { TipoSolicitud } from "./TipoSolicitud.entity";
 
-@Index('UQ_-')
+
 @Entity('SolicitudesTraslado', { schema: 'dbo' })
 export class SolicitudesTraslado {
     @PrimaryGeneratedColumn({ name: 'idSolicitud', type: 'int' })
@@ -22,7 +24,10 @@ export class SolicitudesTraslado {
     @Column('nvarchar', { name: 'codigoSolicitud', unique: true, length: 50})
     codigoSolicitud: string
 
-    @Column("varchar", { name: "observaciones", nullable: true})
+    @Column('varchar', { name: 'solicitante', length: 100 })
+    solicitante: string
+
+    @Column("text", { name: "observaciones", nullable: true })
     observaciones: string | null;
 
     @Column("varchar", { name: "motivo"})
@@ -40,14 +45,20 @@ export class SolicitudesTraslado {
     @Column("int", { name: "idBodegaSolicitada" })
     idBodegaSolicitada: number;
 
-    @ManyToOne(
-        () => Bodegas,
-        (bodega) => bodega.solicitudes
-    )
-    @JoinColumn([
-        { name: "idBodega", referencedColumnName: "idBodega" },
-    ])
-    bodega: Bodegas;
+    @Column("int", { name: "idTipoSolicitud" })
+    idTipoSolicitud: number;
+
+    @ManyToOne(() => Bodegas, (b) => b.solicitudesComoSolicitante)
+    @JoinColumn({ name: "idBodegaSolicitante", referencedColumnName: "idBodega" })
+    bodegaSolicitante: Bodegas;
+
+    @ManyToOne(() => Bodegas, (b) => b.solicitudesComoSolicitada)
+    @JoinColumn({ name: "idBodegaSolicitada", referencedColumnName: "idBodega" })
+    bodegaSolicitada: Bodegas;
+
+    @ManyToOne(() => TipoSolicitud, (b) => b.solicitudesTraslado)
+    @JoinColumn({ name: "idTipoSolicitud", referencedColumnName: "idTipoSolicitud" })
+    tipoSolicitud: TipoSolicitud;
 
     @OneToMany(
         () => EstadosSolicitud,
@@ -62,8 +73,14 @@ export class SolicitudesTraslado {
     ordenesEntrada: OrdenesEntrada[]
 
     @OneToMany(
-        () => OrdenesSalida,
-        (ordenesSalida) => ordenesSalida.solicitudes
+        () => Ordenes,
+        (orden) => orden.solicitudes
     )
-    ordenesSalida: OrdenesSalida[]
+    orden: Ordenes[]
+
+    @OneToMany(
+        () => DetalleSolicitud,
+        (detalleSolicitud) => detalleSolicitud.solicitud,
+    )
+    detalleSolicitud: DetalleSolicitud[]
 }
