@@ -92,18 +92,6 @@ type DetalleDepreciacion {
   valorLibro: Int!
 }
 
-type DetalleEntrada {
-  cantidad: Int!
-  idDetalleEntrada: Int!
-  idOrdenEntrada: Int!
-  idProducto: Int!
-  idProveedor: Int!
-  observaciones: String
-  ordenesEntrada: OrdenesEntrada!
-  producto: Producto!
-  proveedor: Proveedores!
-}
-
 type DetalleMovimientoInventario {
   cantidad: Int!
   idDetalleMovInv: Int!
@@ -182,17 +170,6 @@ type EstadoOrden {
   idOrden: Int!
   observaciones: String
   orden: Ordenes!
-  usuarioRegistro: String!
-}
-
-type EstadoOrdenEntrada {
-  estados: Estados!
-  fechaRegistro: DateTime!
-  idEstado: Int!
-  idEstadoOrden: Int!
-  idOrdenEntrada: Int!
-  observaciones: String
-  ordenEntrada: OrdenesEntrada!
   usuarioRegistro: String!
 }
 
@@ -334,20 +311,6 @@ type Ordenes {
   usuarioRegistro: String!
 }
 
-type OrdenesEntrada {
-  codigoOrden: String!
-  detalleEntrada: [DetalleEntrada!]!
-  estadosOrdenEntrada: [EstadoOrdenEntrada!]!
-  fechaOrden: DateTime!
-  fechaRegistro: DateTime!
-  idOrdenEntrada: Int!
-  idSolicitud: Int
-  noReferencia: String
-  observaciones: String
-  solicitud: SolicitudesTraslado
-  usuarioRegistro: String!
-}
-
 type Producto {
   accesoriosPerifericos: [AccesoriosPerifericos!]!
   armasFuegos: [ArmasFuego!]!
@@ -357,6 +320,7 @@ type Producto {
   detalleMovimientoInventarios: [DetalleMovimientoInventario!]!
   detalleOrdens: [DetalleSalida!]!
   equiposComputos: [EquiposComputo!]!
+  estado: Boolean!
   estadoProductos: [EstadoProducto!]!
   fechaRegistro: DateTime!
   fechaUltModificacion: DateTime!
@@ -390,24 +354,24 @@ type ProveedorProducto {
 }
 
 type Proveedores {
-  codigoProveedor: Int!
+  codigoProveedor: String!
   correo: String
-  detalleEntrada: [DetalleEntrada!]!
   direccion: String!
-  estado: Boolean!
+  estado: Int!
   fechaRegistro: DateTime!
   idProveedor: Int!
   nombreComercial: String
   nombreProveedor: String!
   observaciones: String
-  proveedor: [ProveedorProducto!]!
+  proveedorProducto: [ProveedorProducto!]
   ruc: String
   telefono: String!
   usuarioRegistro: String!
 }
 
 type Query {
-  finProductos: [Producto!]!
+  findAllProveedores: [Proveedores!]!
+  findProductos(id: Int!): [Producto!]!
   hello: String!
 }
 
@@ -433,7 +397,6 @@ type SolicitudesTraslado {
   motivo: String!
   observaciones: String
   orden: [Ordenes!]!
-  ordenesEntrada: [OrdenesEntrada!]!
   solicitante: String!
   tipoSolicitud: TipoSolicitud!
   usuarioRegistro: String!

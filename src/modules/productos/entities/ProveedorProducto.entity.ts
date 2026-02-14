@@ -45,7 +45,7 @@ export class ProveedorProducto {
     @Field(type => Producto)
     producto: Producto
 
-    @ManyToOne(() => Proveedores, (prod) => prod.proveedor)
+    @ManyToOne(() => Proveedores, (prod) => prod.proveedorProducto)
     @JoinColumn([{
         name: 'idProveedor',
         referencedColumnName: 'idProveedor'

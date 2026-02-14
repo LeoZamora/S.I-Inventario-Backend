@@ -10,7 +10,6 @@ import {
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Bodegas } from "../../inventario/entities/Bodegas.entity";
 import { EstadosSolicitud } from './EstadoSolicitud.entity';
-import { OrdenesEntrada } from "src/modules/ordenes/entities/OrdenesEntrada.entity";
 import { Ordenes } from "src/modules/ordenes/entities/Ordenes.entity";
 import { DetalleSolicitud } from "./DetalleSolicitud.entity";
 import { TipoSolicitud } from "./TipoSolicitud.entity";
@@ -79,13 +78,6 @@ export class SolicitudesTraslado {
     )
     @Field(() => [EstadosSolicitud])
     estadoSolicitud: EstadosSolicitud[];
-
-    @OneToMany(
-        () => OrdenesEntrada,
-        (ordenesEntrada) => ordenesEntrada.solicitud
-    )
-    @Field(() => [OrdenesEntrada])
-    ordenesEntrada: OrdenesEntrada[]
 
     @OneToMany(
         () => Ordenes,
