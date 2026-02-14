@@ -6,7 +6,6 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProveedorProducto } from 'src/modules/productos/entities/ProveedorProducto.entity';
-import { DetalleEntrada } from 'src/modules/ordenes/entities/DetalleCompra.entity';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @Index("UQ_codigoProveedor", ["codigoProveedor"], { unique: true })
@@ -20,8 +19,8 @@ export class Proveedores {
     idProveedor: number;
 
     @Column("nvarchar", { name: 'codigoProveedor', unique: true, length: 50})
-    @Field(type => Int)
-    codigoProveedor: number;
+    @Field(() => String)
+    codigoProveedor: string;
 
     @Column("varchar", { name: 'nombreProveedor'})
     @Field()
@@ -48,8 +47,8 @@ export class Proveedores {
     correo: string | null;
 
     @Column("bit", { name: 'estado', default: () => "(1)"})
-    @Field(type => Boolean)
-    estado: boolean;
+    @Field(type => Int)
+    estado: number;
 
     @Column("varchar", { name: 'observaciones', nullable: true})
     @Field(type => String, { nullable: true })
@@ -67,13 +66,7 @@ export class Proveedores {
         () => ProveedorProducto,
         (producto) => producto.proveedor
     )
-    @Field(type => [ProveedorProducto])
-    proveedor: ProveedorProducto[];
+    @Field(type => [ProveedorProducto], { nullable: true })
+    proveedorProducto: ProveedorProducto[];
 
-    @OneToMany(
-        () => DetalleEntrada,
-        (producto) => producto.proveedor
-    )
-    @Field(type => [DetalleEntrada])
-    detalleEntrada: DetalleEntrada[];
 }

@@ -82,6 +82,10 @@ export class Producto {
   @Field()
   usuarioRegistro: string;
 
+  // Campo virtual para GraphQL
+  @Field(() => Boolean, { name: 'estado' })
+  estado: boolean
+
   @Column("int", { name: "idSubCategoria" })
   @Field(type => Int)
   idSubCategoria: number;

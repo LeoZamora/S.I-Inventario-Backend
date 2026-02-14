@@ -61,7 +61,7 @@ export class CategoriaServices {
     }
 
     async finAllSubCategoria(): Promise<SubCategoria[]> {
-        return this.subCategoriaRepository.find()
+        return (await this.subCategoriaRepository.find())
     }
 
 
@@ -109,7 +109,7 @@ export class CategoriaServices {
 
             const newSubCat = queryRunner.manager.create(SubCategoria, {
                 ...subCategoria,
-                codigoSubCategoria: codigo
+                codigoSubCategoria: codigo,
             })
             await queryRunner.manager.save(newSubCat)
 

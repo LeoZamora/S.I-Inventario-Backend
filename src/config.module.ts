@@ -13,11 +13,12 @@ import { join } from "path";
         DatabaseModule,
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
-            playground: false,
+            playground: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             transformAutoSchemaFile: true,
             sortSchema: true,
             installSubscriptionHandlers: true,
+            csrfPrevention: false,
             // typePaths: ['./**/*.graphql'],
             // definitions: {
             //     path: join(process.cwd(), 'src/graphql.ts'),

@@ -21,35 +21,33 @@ export class ProductosServices {
         private tipoProductoRepository: Repository<TipoProducto>
     ) {}
 
-    async findAllProds(): Promise<Producto[]> {
+    async findAllProds() {
         const productos = await this.productoRepository.find({
-            // relations: [
-            //     'inventarioProductos',
-            //     'subCategoria.categoria',
-            // ],
-            // order: { idProducto: "ASC" }
+            relations: [
+                'inventarioProductos.inventario',
+                'subCategoria.categoria',
+            ],
+            order: { idProducto: "ASC" }
         })
 
-        return productos
-
-        // return productos.map(producto => {
-        //     return {
-        //         idProducto: producto.idProducto,
-        //         codigoProducto: producto.codigoProducto,
-        //         nombreProducto: producto.nombreProducto,
-        //         subCategoria: producto.subCategoria.nombre,
-        //         idSubCategoria: producto.subCategoria.idSubCategoria,
-        //         categoria: producto.subCategoria.categoria.nombreCategoria,
-        //         idCategoria: producto.subCategoria.categoria.idCategoria,
-        //         marca: producto.marca,
-        //         modelo: producto.modelo,
-        //         precio: producto.precio,
-        //         stock: producto.inventarioProductos[0]?.stock,
-        //         stockMin: producto.inventarioProductos[0]?.stockMin,
-        //         stockMax: producto.inventarioProductos[0]?.stockMax,
-        //         estado: producto.inventarioProductos[0]?.estado,
-        //     }
-        // });
+        return productos.map(producto => {
+            return {
+                idProducto: producto.idProducto,
+                codigoProducto: producto.codigoProducto,
+                nombreProducto: producto.nombreProducto,
+                subCategoria: producto.subCategoria.nombre,
+                idSubCategoria: producto.subCategoria.idSubCategoria,
+                categoria: producto.subCategoria.categoria.nombreCategoria,
+                idCategoria: producto.subCategoria.categoria.idCategoria,
+                marca: producto.marca,
+                modelo: producto.modelo,
+                precio: producto.precio,
+                stock: producto.inventarioProductos[0]?.stock,
+                stockMin: producto.inventarioProductos[0]?.stockMin,
+                stockMax: producto.inventarioProductos[0]?.stockMax,
+                estado: producto.inventarioProductos[0]?.estado,
+            }
+        });
     }
 
     async createProducto(producto: productoDTO) {
@@ -131,7 +129,7 @@ export class ProductosServices {
         } finally {
             await queryRunner.release();
         }
-    }
+    }   
 
     async getCodigoRecomendado(): Promise<string> {
         const ultimoRegistro = await this.productoRepository.find({
@@ -183,5 +181,37 @@ export class ProductosServices {
                 `Error al crear el registro: ${error.message}`
             );
         }
+    }
+
+
+    // FOR GRAPHQL
+    async findProdGQL(id: number): Promise<Producto[]> {
+        const productos = await this.productoRepository.find({
+            relations: [
+                'inventarioProductos.inventario',
+                'tipoProducto',
+                'subCategoria.categoria',
+            ],
+            order: { idProducto: "ASC" },
+            where: {
+                subCategoria: {
+                    categoria: {
+                        idCategoria: id
+                    }
+                }
+            }
+        })
+
+        productos.forEach(prod => {
+            if (prod.inventarioProductos && prod.inventarioProductos.length > 0) {
+                const tieneInventarioActivo = prod.inventarioProductos.some(
+                    inv => Number(inv.estado) === 1
+                );
+
+                prod.estado = tieneInventarioActivo;
+            }
+        });
+
+        return productos
     }
 }
