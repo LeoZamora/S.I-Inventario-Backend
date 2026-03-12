@@ -28,6 +28,14 @@ export class TipoProducto {
   @Field(type => Date)
   fechaRegistro: Date;
 
+  @Column("varchar", { name: "usuarioRegistro", length: 50 })
+  @Field(type => String)
+  usuarioRegistro: string;
+
+  @Column("bit", { name: "estado", default: () => "1" })
+  @Field(type => Int)
+  estado: number;
+
   @OneToMany(() => Producto, (producto) => producto.tipoProducto)
   @Field(type => [Producto])
   productos: Producto[];

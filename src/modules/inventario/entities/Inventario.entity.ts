@@ -36,6 +36,10 @@ export class Inventario {
   @Field(() => Int)
   estado: number;
 
+  @Column("nvarchar", { name: "pathRoute", length: 50 })
+  @Field()
+  pathRoute: string;
+
   @Column("varchar", { name: "observaciones", nullable: true })
   @Field(type => String, { nullable: true })
   observaciones: string | null;

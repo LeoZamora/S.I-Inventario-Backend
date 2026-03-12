@@ -30,10 +30,15 @@ export class subCategoriaDTO {
     @IsString({ message: 'El nombre debe ser un texto' })
     nombre: string;
 
-    // @ApiProperty({ example: 'SUBEC001', maxLength: 100 })
-    // @IsNotEmpty({message: 'el codigo es en obligatorio'})
-    // @IsString({ message: 'El codigo debe ser un texto' })
-    // codigoSubCategoria: string;
+    @ApiProperty({ example: 'SUBEC001', maxLength: 100 })
+    @IsNotEmpty({message: 'el código es en obligatorio'})
+    @IsString({ message: 'El codigo debe ser un texto' })
+    codigoSubCategoria: string;
+
+    @ApiProperty({ example: 'PROD_0001', maxLength: 50 })
+    @IsNotEmpty({message: 'el código es en obligatorio'})
+    @IsString({ message: 'El codigo debe ser un texto' })
+    codigoProducto: string;
 
     @ApiProperty({ example: 'Laptops, pc, tablets, telefono...' })
     @IsOptional()
@@ -44,6 +49,28 @@ export class subCategoriaDTO {
     @IsNotEmpty({ message: 'El nombre de usuario es obligatorio' })
     @IsString({message: 'El usuario debe ser un string' })
     usuarioRegistro: string;
+
+    @ApiProperty({ minLength: 1 })
+    @IsNotEmpty({ message: 'El id de la categoria es obligatorio' })
+    @IsNumber()
+    idCategoria: number
+}
+
+export class editSubCategoriaDTO {
+    @ApiProperty({ example: 'Dispositivos Electronicos' })
+    @IsNotEmpty({ message: 'El nombre es obligatorio' })
+    @IsString({ message: 'El nombre debe ser un texto' })
+    nombre: string;
+
+    @ApiProperty({ example: 'PROD_0001', maxLength: 50 })
+    @IsNotEmpty({message: 'el código es obligatorio'})
+    @IsString({ message: 'El codigo debe ser un texto' })
+    codigoProducto: string;
+
+    @ApiProperty({ example: 'Laptops, pc, tablets, telefono...' })
+    @IsOptional()
+    @IsString({ message: 'La descripcion debe ser un texto' })
+    descripcion: string | null;
 
     @ApiProperty({ minLength: 1 })
     @IsNotEmpty({ message: 'El id de la categoria es obligatorio' })

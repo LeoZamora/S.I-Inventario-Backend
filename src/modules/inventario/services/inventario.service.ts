@@ -25,7 +25,29 @@ export class InventarioServices {
     ) {}
 
     async findAll(): Promise<Inventario[]>{
-        return (await this.inventarioReposity.find())
+        return (await this.inventarioReposity.find({
+            relations: [
+                'estadoInventarios',
+                'departamento',
+                'bodegas',
+                'inventarioCategoriasPermitidas',
+                'inventarioProductos'
+            ]
+        }))
+    }
+
+    async findInventarioById(id: number) {
+        return (await this.inventarioReposity.findOne({
+            where: { idInventario: id },
+            relations: [
+                'estadoInventarios',
+                'departamento',
+                'bodegas',
+                'bodegas.ubicacion',
+                'inventarioCategoriasPermitidas',
+                'inventarioProductos.producto'
+            ]
+        }))
     }
 
     async findInventarioProducto() {

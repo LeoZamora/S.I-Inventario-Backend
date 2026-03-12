@@ -34,6 +34,10 @@ export class Bodegas {
   @Field(type => String, { nullable: true })
   descripcion: string | null;
 
+  @Column('bit',  { name: 'estado', default: () => "1" })
+  @Field(type => Int)
+  estado: number
+
   @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
   @Field()
   fechaRegistro: Date;

@@ -35,6 +35,7 @@ type ArmasFuego {
 type Bodegas {
   codigoBodega: String!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idBodega: Int!
   idUbicacion: Int!
@@ -49,6 +50,7 @@ type Bodegas {
 type Categoria {
   codigoSubCategoria: String!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idCategoria: Int!
   nombreCategoria: String!
@@ -58,10 +60,12 @@ type Categoria {
 
 type CategoriaImpresora {
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idCategoriaImpresora: Int!
   impresoras: [Impresoras!]!
   nombreCategoria: String!
+  usuarioRegistro: String!
 }
 
 """
@@ -72,6 +76,7 @@ scalar DateTime
 type Departamento {
   codigoDepartamento: String!
   descripcion: String
+  estado: Int!
   estadoDepartamentos: [EstadoDepartamento!]!
   fechaRegistro: DateTime!
   idDepartamento: Int!
@@ -240,6 +245,7 @@ type Inventario {
   inventarioProductos: [InventarioProducto!]!
   nombreInventario: String!
   observaciones: String
+  pathRoute: String!
   usuarioRegistro: String!
 }
 
@@ -370,17 +376,34 @@ type Proveedores {
 }
 
 type Query {
+  finCategoryById(idCategoria: Int!): Categoria!
+  finSubCategoryByCategory(idCategoria: Int!): [SubCategoria!]!
+  finSubCategoryById(idSubCategoria: Int!): SubCategoria!
+  findAllBodegas: [Bodegas!]!
+  findAllBodegasCombobox(idUbicacion: Int!): [Bodegas!]!
+  findAllCategories: [Categoria!]!
+  findAllProductos: [Producto!]!
   findAllProveedores: [Proveedores!]!
+  findAllUbicaciones: [Ubicaciones!]!
+  findBodegaById(idBodega: Int!): Bodegas!
+  findDepartamentoById(idDepartamento: Int!): Departamento!
+  findDepartamentos: [Departamento!]!
+  findInventarioById(idInventario: Int!): Inventario!
+  findInventarios: [Inventario!]!
   findProductos(id: Int!): [Producto!]!
-  hello: String!
+  findTipoProducto: [TipoProducto!]!
+  findTipoProductoById(idTipoProducto: Int!): TipoProducto!
+  findUbicacionById(idUbicacion: Int!): Ubicaciones!
 }
 
 type SistemaDisparo {
   armasFuegos: [ArmasFuego!]!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idSistemaDisparo: Int!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type SolicitudesTraslado {
@@ -404,8 +427,10 @@ type SolicitudesTraslado {
 
 type SubCategoria {
   categoria: Categoria!
+  codigoProducto: String!
   codigoSubCategoria: String!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idCategoria: Int!
   idSubCategoria: Int!
@@ -418,42 +443,52 @@ type SubCategoria {
 type TipoAlmacenamiento {
   descripcion: String
   equiposComputos: [EquiposComputo!]!
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoAlmacenamiento: Int!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoArma {
   armasFuegos: [ArmasFuego!]!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoArma: Int!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoCalibre {
   armasFuegos: [ArmasFuego!]!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idCalibre: Int!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoConexion {
   accesoriosPerifericos: [AccesoriosPerifericos!]!
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoConexion: Int!
   impresoras: [Impresoras!]!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoDispositivo {
   descripcion: String
   equiposComputos: [EquiposComputo!]!
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoDispositivo: Int!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoEstados {
@@ -468,18 +503,22 @@ type TipoEstados {
 
 type TipoImpresora {
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoImpresion: Int!
   impresoras: [Impresoras!]!
   nombre: String!
+  usuarioRegistro: String!
 }
 
 type TipoMovimientoInventario {
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoMovimiento: Int!
   movimientoInventarios: [MovimientoInventario!]!
   nombreMovimiento: String!
+  usuarioRegistro: String!
 }
 
 type TipoOrdenes {
@@ -492,10 +531,12 @@ type TipoOrdenes {
 
 type TipoProducto {
   descripcion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idTipoProducto: Int!
   nombre: String!
   productos: [Producto!]!
+  usuarioRegistro: String!
 }
 
 type TipoSolicitud {
@@ -510,6 +551,7 @@ type Ubicaciones {
   bodegas: [Bodegas!]!
   codigoUbicacion: String!
   direccion: String
+  estado: Int!
   fechaRegistro: DateTime!
   idUbicacion: Int!
   nombreUbicacion: String!

@@ -19,6 +19,13 @@ export class DepartamentoServices {
         return (await this.departamentoRepository.find())
     }
 
+    async findDepartametosById(id: number){
+        return (await this.departamentoRepository.findOne({
+            where: { idDepartamento: id },
+            relations: []
+        }))
+    }
+
     async createDepartamento(departamento: departamentoDTO) {
         const queryRunner = this.dataSource.createQueryRunner()
 
@@ -40,7 +47,7 @@ export class DepartamentoServices {
             const deptodSaved = await queryRunner.manager.save(Departamento, nuevoDepto)
 
             const estado = await queryRunner.manager.findOne(Estados, {
-                where: { codigoEstado: 'DEPTO-001' }
+                where: { codigoEstado: 'DEPTO-0001' }
             })
 
             if (estado) {
@@ -73,5 +80,26 @@ export class DepartamentoServices {
         } finally {
             await queryRunner.release()
         }
+    }
+
+    async getCodigoDepartamento() {
+        let codigo: string;
+
+        const ultimoRegistro = await this.departamentoRepository.find({
+            order: {
+                idDepartamento: "DESC"
+            },
+            take: 1
+        })
+
+        if (ultimoRegistro.length > 0) {
+            const [code, num] = ultimoRegistro[0].codigoDepartamento.split("_")
+            const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+            codigo = `${code}_${next}`;
+        } else {
+            codigo = `DEPTO_0001`
+        }
+
+        return codigo
     }
 }

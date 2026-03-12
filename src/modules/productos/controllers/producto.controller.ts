@@ -1,9 +1,9 @@
-import { Controller, Get, Body, Post } from "@nestjs/common";
+import { Controller, Get, Body, Post, Param, ParseIntPipe } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiBody } from "@nestjs/swagger";
 import { ProductosServices } from "../services/productos.service";
 import { productoDTO } from "../dtos/producto.dto";
 import { ProductosUtilsServices } from "../services/productoUtils.service";
-import { catImpresoraDTO, tipoCompDTO } from "../dtos/tipoInfo.dto";
+import { catImpresoraDTO, tipoCompDTO, tipoProductoDTO } from "../dtos/tipoInfo.dto";
 
 @Controller('productos')
 @ApiTags('Productos')
@@ -36,10 +36,12 @@ export class ProductosController {
         return (await this.productosServices.createProducto(producto))
     }
 
-    @Get('/codigo-recomendado')
+    @Get('/codigo-recomendado/:idSubCategoria')
     @ApiOperation({ summary: 'Obtener código recomendado para un nuevo producto' })
-    async getCodigoRecomendado() {
-        return await this.productosServices.getCodigoRecomendado();
+    async getCodigoRecomendado(
+        @Param('idSubCategoria', ParseIntPipe) idSubCategoria: number
+    ) {
+        return await this.productosServices.getCodigoRecomendado(idSubCategoria);
     }
 
     @Get('/tipoProducto')
@@ -51,10 +53,10 @@ export class ProductosController {
     @Post('/tipoProducto')
     @ApiOperation({ summary: 'Crear un nuevo tipo de producto' })
     @ApiBody({
-        type: tipoCompDTO,
+        type: tipoProductoDTO,
     })
     async createTipoProducto(
-        @Body() tipoProducto: tipoCompDTO
+        @Body() tipoProducto: tipoProductoDTO
     ) {
         return (await this.productosServices.createTipoProducto(tipoProducto))
     }

@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { departamentoProviders } from "./providers/departamento.providers";
 import { DepartamentoController } from "./controlllers/departamento.controller";
 import { DepartamentoServices } from "./services/departamento.service";
+import { DepartamentoResolvers } from "./resolvers/departamento.resolver";
 
 @Module({
     imports: [],
@@ -10,7 +11,8 @@ import { DepartamentoServices } from "./services/departamento.service";
     ],
     providers: [
         ...departamentoProviders,
-        DepartamentoServices
+        DepartamentoServices,
+        DepartamentoResolvers
     ],
     exports: [
         DepartamentoServices

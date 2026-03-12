@@ -23,7 +23,7 @@ export class Server {
             }),
         )
 
-        app.useGlobalFilters(new GlobalHttpExceptionFilter())
+        // app.useGlobalFilters(new GlobalHttpExceptionFilter())
 
         // CONFIGURACION DE SWAGGER
         const configSwagger = new DocumentBuilder()

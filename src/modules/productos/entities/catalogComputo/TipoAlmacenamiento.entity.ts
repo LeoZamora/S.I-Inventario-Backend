@@ -24,6 +24,14 @@ export class TipoAlmacenamiento {
   @Field(type => String, { nullable: true })
   descripcion: string | null;
 
+  @Column("varchar", { name: "usuarioRegistro", length: 50 })
+  @Field(type => String)
+  usuarioRegistro: string;
+
+  @Column("bit", { name: "estado", default: () => "1" })
+  @Field(type => Int)
+  estado: number;
+
   @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
   @Field(type => Date)
   fechaRegistro: Date;

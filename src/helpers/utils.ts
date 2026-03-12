@@ -66,39 +66,43 @@ export function isImpresora(obj: any): obj is impresoraDTO {
 }
 
 
-export async function validateTypeProd(producto: any, idProducto: number, queryRunner: QueryRunner) {
+export async function validateTypeProd(producto: any, idProducto: number, queryRunner: QueryRunner, usuarioRegistro: string) {
     try {
-        if (isEquipoComputo({...producto, idProducto})) {
+        if (isEquipoComputo({...producto, idProducto, usuarioRegistro})) {
             const newRegister = queryRunner.manager.create(EquiposComputo, {
                 ...producto,
-                idProducto
+                idProducto,
+                usuarioRegistro
             })
             await queryRunner.manager.save(EquiposComputo, newRegister)
             return
         }
 
-        if (isArma({...producto, idProducto})) {
+        if (isArma({...producto, idProducto, usuarioRegistro})) {
             const newRegister = queryRunner.manager.create(ArmasFuego, {
                 ...producto,
-                idProducto
+                idProducto,
+                usuarioRegistro
             })
             await queryRunner.manager.save(ArmasFuego, newRegister)
             return
         }
 
-        if (isMobiliario({...producto, idProducto})) {
+        if (isMobiliario({...producto, idProducto, usuarioRegistro})) {
             const newRegister = queryRunner.manager.create(Mobiliario, {
                 ...producto,
-                idProducto
+                idProducto,
+                usuarioRegistro
             })
             await queryRunner.manager.save(Mobiliario, newRegister)
             return
         }
 
-        if (isImpresora({...producto, idProducto})) {
+        if (isImpresora({...producto, idProducto, usuarioRegistro})) {
             const newRegister = queryRunner.manager.create(Impresoras, {
                 ...producto,
-                idProducto
+                idProducto,
+                usuarioRegistro
             })
             await queryRunner.manager.save(Impresoras, newRegister)
             return

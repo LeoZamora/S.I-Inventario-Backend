@@ -8,6 +8,7 @@ import { InventarioModule } from "../inventario/Inventario.module";
 import { CatalogModule } from "../catalog/Catalog.module";
 import { ProductosUtilsServices } from "./services/productoUtils.service";
 import { ProductosResolvers } from "./resolvers/productos.resolver";
+import { TipoProductoResolver } from "./resolvers/productos.resolver";
 
 @Module({
     imports: [
@@ -25,7 +26,8 @@ import { ProductosResolvers } from "./resolvers/productos.resolver";
         ...catalogCompProviders,
         ProductosServices,
         ProductosUtilsServices,
-        ProductosResolvers
+        ProductosResolvers,
+        TipoProductoResolver,
     ],
     exports: [
         ProductosServices,

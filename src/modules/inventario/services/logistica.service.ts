@@ -18,11 +18,35 @@ export class LogisticaServices {
     ) {}
 
     async findAllUbicaciones(): Promise<Ubicaciones[]> {
-        return (await this.ubicacionRepository.find())
+        return (await this.ubicacionRepository.find({
+            relations: ['bodegas'],
+            order: { idUbicacion: "ASC" }
+        }))
+    }
+
+    async findUbicacionById(id: number) {
+        return (await this.ubicacionRepository.findOne({
+            where: { idUbicacion: id },
+            relations: [
+                'bodegas',
+            ],
+            order: { idUbicacion: "ASC" }
+        }))
     }
 
     async findAllBodegas(): Promise<Bodegas[]> {
-        return (await this.bodegaRepository.find())
+        return (await this.bodegaRepository.find({
+            relations: ['ubicacion'],
+            order: { idBodega: "ASC" }
+        }))
+    }
+
+    async findAllBodegasById(id: number) {
+        return (await this.bodegaRepository.find({
+            where: { idUbicacion: id },
+            relations: ['ubicacion'],
+            order: { idBodega: "ASC" }
+        }))
     }
 
     async createUbicacion(ubicacion: ubicacionDTO) {
@@ -116,4 +140,85 @@ export class LogisticaServices {
             await queryRunner.release()
         }
     }
+
+    async getCodigoUbicacion() {
+        let codigo: string;
+
+        const ultimoRegistro = await this.ubicacionRepository.find({
+            order: {
+                idUbicacion: "DESC"
+            },
+            take: 1
+        })
+
+        if (ultimoRegistro.length > 0) {
+            const [code, num] = ultimoRegistro[0].codigoUbicacion.split("_")
+            const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+            codigo = `${code}_${next}`;
+        } else {
+            codigo = `UBI_0001`
+        }
+
+        return codigo
+    }
+
+    async getCodigoBodega() {
+        let codigo: string;
+
+        const ultimoRegistro = await this.bodegaRepository.find({
+            order: {
+                idBodega: "DESC"
+            },
+            take: 1
+        })
+
+        if (ultimoRegistro.length > 0) {
+            const [code, num] = ultimoRegistro[0].codigoBodega.split("_")
+            const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+            codigo = `${code}_${next}`;
+        } else {
+            codigo = `BDG_0001`
+        }
+
+        return codigo
+    }
+
+    async findBodegaById(id: number) {
+        return (await this.bodegaRepository.findOne({
+            where: { idBodega: id },
+            relations: [],
+            order: { idBodega: "ASC" }
+        }))
+    }
+
+    // async getCodigoBodega(id: number) {
+    //     let codigo: string;
+    //     const ubicacion = await this.ubicacionRepository.findOne({
+    //         where: { idUbicacion: id }
+    //     })
+
+    //     if (!ubicacion) {
+    //         throw new BadRequestException(
+    //             'Categoria no ha sido encontrada'
+    //         )
+    //     }
+
+    //     const ultimoRegistro = await this.bodegaRepository.find({
+    //         where: { idBodega: ubicacion?.idUbicacion },
+    //         order: {
+    //             idBodega: "DESC"
+    //         },
+    //         take: 1
+    //     })
+
+    //     if (ultimoRegistro.length > 0) {
+    //         const [code, num] = ultimoRegistro[0].codigoBodega.split("_")
+    //         const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+    //         codigo = `${code}_${next}`;
+    //     } else {
+    //         codigo = `BDG_0001`
+    //     }
+
+    //     return codigo
+    // }
 }

@@ -5,6 +5,8 @@ import { EstadosController } from "./controllers/estados.controller";
 import { EstadosServices } from "./services/estados.service";
 import { CategoriaServices } from "./services/categoria.service";
 import { CategoriaController } from "./controllers/categoria.controller";
+import { CategoriaResolver } from "./resolvers/cactegoria.resolver";
+import { productoProviders } from "../productos/providers/producto.providers";
 
 @Module({
     imports: [],
@@ -15,8 +17,10 @@ import { CategoriaController } from "./controllers/categoria.controller";
     providers: [
         ...categoriasProviders,
         ...estadosProviders,
+        ...productoProviders,
         EstadosServices,
-        CategoriaServices
+        CategoriaServices,
+        CategoriaResolver
     ],
     exports: [
         ...categoriasProviders,

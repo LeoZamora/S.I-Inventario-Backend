@@ -5,6 +5,8 @@ import { InventarioServices } from "./services/inventario.service";
 import { LogisticaController } from "./controllers/logistica.controller";
 import { LogisticaServices } from "./services/logistica.service";
 import { CatalogModule } from "../catalog/Catalog.module";
+import { LogisticaResolver } from "./resolvers/logistica.resolver";
+import { InventarioResolvers } from "./resolvers/Inventario.resolver";
 
 @Module({
     imports: [
@@ -17,7 +19,9 @@ import { CatalogModule } from "../catalog/Catalog.module";
     providers: [
         ...inventarioProviders,
         InventarioServices,
-        LogisticaServices
+        LogisticaServices,
+        LogisticaResolver,
+        InventarioResolvers
     ],
     exports: [
         ...inventarioProviders,
