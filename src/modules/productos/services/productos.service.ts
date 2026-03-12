@@ -6,7 +6,8 @@ import { Producto } from "../entities/Producto.entity";
 import { productoDTO } from "../dtos/producto.dto";
 import { DataSource, Repository } from "typeorm";
 import { TipoProducto } from "../entities/TipoProducto.entity";
-import { tipoCompDTO } from "../dtos/tipoInfo.dto";
+import { tipoCompDTO, tipoProductoDTO } from "../dtos/tipoInfo.dto";
+import { SubCategoria } from "src/modules/catalog/entities/SubCategoria.entity";
 
 @Injectable()
 export class ProductosServices {
@@ -18,7 +19,10 @@ export class ProductosServices {
         private dataSource: DataSource,
 
         @Inject('TIPOPROD_PROVIDE')
-        private tipoProductoRepository: Repository<TipoProducto>
+        private tipoProductoRepository: Repository<TipoProducto>,
+
+        @Inject('SUBCATEGORIA_PROVIDE')
+        private subCategoriaRepository: Repository<SubCategoria>
     ) {}
 
     async findAllProds() {
@@ -95,7 +99,8 @@ export class ProductosServices {
             await validateTypeProd(
                 producto.detallesEspecificos,
                 productoSaved.idProducto,
-                queryRunner
+                queryRunner,
+                productoSaved.usuarioRegistro,
             )
 
             const newInventarioProd = queryRunner.manager.create(InventarioProducto, {
@@ -118,7 +123,6 @@ export class ProductosServices {
 
         } catch (error) {
             await queryRunner.rollbackTransaction();
-
             if (error instanceof BadRequestException) {
                 throw error;
             }
@@ -129,23 +133,37 @@ export class ProductosServices {
         } finally {
             await queryRunner.release();
         }
-    }   
+    }
 
-    async getCodigoRecomendado(): Promise<string> {
-        const ultimoRegistro = await this.productoRepository.find({
-            order: {
-                idProducto: 'DESC'
-            },
-            take: 1
-        });
+    async getCodigoRecomendado(id: number) {
+        let codigo: string;
+        const subCategoria = await this.subCategoriaRepository.findOne({
+            where: { idSubCategoria: id }
+        })
 
-        if (ultimoRegistro.length > 0) {
-            const ultimoId = ultimoRegistro[0].idProducto;
-            const nuevoId = ultimoId + 1;
-            return `PROD_${nuevoId.toString().padStart(4, '0')}`;
+        if (!subCategoria) {
+            throw new BadRequestException(
+                'Categoria no ha sido encontrada'
+            )
         }
 
-        return `PROD_0001`;
+        const ultimoRegistro = await this.productoRepository.find({
+            where: { idSubCategoria: subCategoria?.idSubCategoria },
+            order: {
+                idProducto: "DESC"
+            },
+            take: 1
+        })
+
+        if (ultimoRegistro.length > 0) {
+            const [code, num] = ultimoRegistro[0].codigoProducto.split("_")
+            const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+            codigo = `${subCategoria?.codigoProducto ?? "NOCODE"}_${next}`;
+        } else {
+            codigo = `${subCategoria.codigoProducto}_0001`
+        }
+
+        return codigo
     }
 
 
@@ -153,7 +171,7 @@ export class ProductosServices {
         return (await this.tipoProductoRepository.find())
     }
 
-    async createTipoProducto(tipo: tipoCompDTO) {
+    async createTipoProducto(tipo: tipoProductoDTO) {
         const exist = await this.tipoProductoRepository.findOne({
             where: { nombre: tipo.nombre }
         })
@@ -165,8 +183,8 @@ export class ProductosServices {
         }
 
         try {
-            const newTipoAlm = this.tipoProductoRepository.create(tipo)
-            await this.tipoProductoRepository.save(newTipoAlm)
+            const newTipoProd = this.tipoProductoRepository.create(tipo)
+            await this.tipoProductoRepository.save(newTipoProd)
 
             return {
                 code: 200,
@@ -194,10 +212,8 @@ export class ProductosServices {
             ],
             order: { idProducto: "ASC" },
             where: {
-                subCategoria: {
-                    categoria: {
-                        idCategoria: id
-                    }
+                inventarioProductos: {
+                    idInventario: id
                 }
             }
         })
@@ -213,5 +229,38 @@ export class ProductosServices {
         });
 
         return productos
+    }
+
+    // FOR GRAPHQL
+    async findProductos(): Promise<Producto[]> {
+        const productos = await this.productoRepository.find({
+            relations: [
+                'inventarioProductos.inventario',
+                'tipoProducto',
+                'subCategoria.categoria',
+            ],
+            order: { idProducto: "ASC" }
+        })
+
+        productos.forEach(prod => {
+            if (prod.inventarioProductos && prod.inventarioProductos.length > 0) {
+                const tieneInventarioActivo = prod.inventarioProductos.some(
+                    inv => Number(inv.estado) === 1
+                );
+
+                prod.estado = tieneInventarioActivo;
+            }
+        });
+
+        return productos
+    }
+
+    async findTipoProductoById(id: number) {
+        return (await this.tipoProductoRepository.findOne({
+            where: { idTipoProducto: id },
+            relations: [
+                'productos'
+            ]
+        }))
     }
 }

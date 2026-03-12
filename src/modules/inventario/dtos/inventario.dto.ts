@@ -21,6 +21,12 @@ export class inventarioDTO {
     @MaxLength(100, { message: 'El nombre no puede exceder 100 caracteres' })
     nombreInventario: string;
 
+    @ApiProperty({ maxLength: 50 })
+    @IsString({ message: 'La ruta del inventario debe ser texto' })
+    @IsNotEmpty({ message: 'La ruta del inventario es obligatoria' })
+    @MaxLength(50, { message: 'La ruta no puede exceder 50 caracteres' })
+    pathRoute: string;
+
     @ApiProperty({ nullable: true })
     @IsOptional()
     @IsString({ message: 'Las observaciones deben ser texto' })

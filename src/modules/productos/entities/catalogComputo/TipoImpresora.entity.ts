@@ -24,6 +24,14 @@ export class TipoImpresora {
   @Field(type => String, { nullable: true })
   descripcion: string | null;
 
+  @Column('bit',  { name: 'estado', default: () => "1" })
+  @Field(type => Int)
+  estado: number
+
+  @Column("varchar", { name: "usuarioRegistro", length: 50 })
+  @Field()
+  usuarioRegistro: string;
+
   @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
   @Field(type => Date)
   fechaRegistro: Date;

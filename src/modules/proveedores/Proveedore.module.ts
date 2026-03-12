@@ -9,7 +9,7 @@ import { ProveedorResolver } from "./resolvers/proveedor.resolver";
     providers: [
         ...proveedoresProviders,
         ProveedorServices,
-        ProveedorResolver
+        ProveedorResolver,
     ],
     exports: [],
 })

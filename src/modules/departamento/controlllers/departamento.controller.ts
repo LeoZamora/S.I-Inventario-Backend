@@ -22,6 +22,12 @@ export class DepartamentoController {
         }
     }
 
+    @Get('/codigo-recomendado')
+    @ApiOperation({ summary: 'Obtener codigo recomendado' })
+    async findCodigoDepartamento() {
+        return (await this.deptoServices.getCodigoDepartamento())
+    }
+
     @Post()
     @ApiOperation({ summary: 'crear un nuevo departamento' })
     @ApiBody({

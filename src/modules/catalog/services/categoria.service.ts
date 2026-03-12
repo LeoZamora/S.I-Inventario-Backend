@@ -1,8 +1,9 @@
-import { Injectable, Inject, BadRequestException, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, Inject, BadRequestException, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { DataSource, Repository, QueryRunner } from 'typeorm';
 import { Categoria } from "../entities/Categoria.entity";
 import { SubCategoria } from "../entities/SubCategoria.entity";
-import { categoriaDTO, subCategoriaDTO } from "../dtos/categorias.dto";
+import { categoriaDTO } from "../dtos/categorias.dto";
+import { Producto } from "src/modules/productos/entities/Producto.entity";
 
 
 @Injectable()
@@ -10,6 +11,10 @@ export class CategoriaServices {
     constructor(
         @Inject('CATEGORIA_PROVIDE')
         private categoriaRepository: Repository<Categoria>,
+
+        @Inject('PRODUCTO_PROVIDE')
+        private productoRepository: Repository<Producto>,
+
         @Inject('SUBCATEGORIA_PROVIDE')
         private subCategoriaRepository: Repository<SubCategoria>,
 
@@ -17,8 +22,47 @@ export class CategoriaServices {
         private dataSource: DataSource
     ) {}
 
+    async finAllSubCategoria(): Promise<SubCategoria[]> {
+        return (await this.subCategoriaRepository.find())
+    }
+
+    async finSubCategoryByCategory(id: number) {
+        return (await this.subCategoriaRepository.find({
+            where: { idCategoria: id },
+            relations: [
+                'categoria'
+            ]
+        }))
+    }
+
     async findAllCategoria(): Promise<Categoria[]> {
-        return this.categoriaRepository.find()
+        return (await this.categoriaRepository.find({
+            relations: [
+                'subCategorias'
+            ]
+        }))
+    }
+
+    async findCategoryById(id: number) {
+        return (await this.categoriaRepository.findOne({
+            where: {
+                idCategoria: id
+            },
+            relations: [
+                'subCategorias'
+            ],
+            order: { idCategoria: "DESC" }
+        }))
+    }
+
+    async findSubCategoryById(id: number) {
+        return (await this.subCategoriaRepository.findOne({
+            where: {
+                idSubCategoria: id
+            },
+            relations: [],
+            order: { idSubCategoria: "DESC" }
+        }))
     }
 
     async createCategoria(categoria: categoriaDTO) {
@@ -60,45 +104,17 @@ export class CategoriaServices {
         }
     }
 
-    async finAllSubCategoria(): Promise<SubCategoria[]> {
-        return (await this.subCategoriaRepository.find())
-    }
-
 
     async createSubCategoria(subCategoria: Partial<SubCategoria>) {
         const queryRunner = this.dataSource.createQueryRunner()
-        let codigo: string;
 
         await queryRunner.connect()
         await queryRunner.startTransaction()
 
         try {
-            const categoria = await this.categoriaRepository.findOne({
-                where: { idCategoria: subCategoria.idCategoria }
-            })
-            const ultimoRegistro = await queryRunner.manager.find(SubCategoria, {
-                order: {
-                    idCategoria: 'DESC'
-                },
-                take: 1
-            })
-
-            if (!categoria) {
-                throw new BadRequestException(
-                    'Categoria no ha sido encontrada'
-                )
-            }
-
-            if (ultimoRegistro.length > 0) {
-                const ultimoId = ultimoRegistro[0].idCategoria
-                const nuevoId = ultimoId + 1
-                codigo = `${categoria.codigoSubCategoria}_${nuevoId.toString().padStart(4, '0')}`
-            } else {
-                codigo = `${categoria.codigoSubCategoria}_0001`
-            }
 
             const exist = await queryRunner.manager.findOne(SubCategoria, {
-                where: { codigoSubCategoria: codigo }
+                where: { codigoSubCategoria: subCategoria.codigoSubCategoria }
             })
 
             if (exist) {
@@ -109,7 +125,6 @@ export class CategoriaServices {
 
             const newSubCat = queryRunner.manager.create(SubCategoria, {
                 ...subCategoria,
-                codigoSubCategoria: codigo,
             })
             await queryRunner.manager.save(newSubCat)
 
@@ -131,5 +146,91 @@ export class CategoriaServices {
         } finally {
             await queryRunner.release()
         }
+    }
+
+    async editSubCategoria(id: number, updateSubCat: Partial<SubCategoria>) {
+        const queryRunner = this.dataSource.createQueryRunner()
+
+        await queryRunner.connect()
+        await queryRunner.startTransaction()
+
+        try {
+            const subCat = await queryRunner.manager.findOne(SubCategoria, {
+                where: { idSubCategoria: id }
+            })
+
+            if (!subCat) {
+                throw new NotFoundException ('La subcategoria  no existe')
+            }
+
+            const productos = await queryRunner.manager.find(Producto, {
+                where: { idSubCategoria: subCat.idSubCategoria },
+                order: { idProducto: 'DESC' }
+            })
+
+            if (productos.length > 0) {
+                for (const prod of productos) {
+                    const [code, num] = prod.codigoProducto.split("_")
+
+                    if (updateSubCat.codigoProducto) {
+                        if (updateSubCat.codigoProducto !== code) {
+                            throw new Error("Ya existen productos registrados con este codigo de productos.")
+                        }
+                    }
+                }
+            }
+
+            const updateData = queryRunner.manager.merge(SubCategoria, subCat, updateSubCat)
+            await queryRunner.manager.save(updateData)
+
+            await queryRunner.commitTransaction()
+
+            return {
+                code: 200,
+                msg: 'SubCategoria actualizada con éxito',
+            };
+        } catch (error) {
+            await queryRunner.rollbackTransaction()
+            if (error instanceof BadRequestException) {
+                throw error
+            }
+
+            throw new InternalServerErrorException(
+                `Error al crear la subcategoria: ${error.message}`
+            );
+        } finally {
+            await queryRunner.release()
+        }
+    }
+
+    async getCodigoSubCategoria(id: number) {
+        let codigo: string;
+        const categoria = await this.categoriaRepository.findOne({
+            where: { idCategoria: id }
+        })
+
+        if (!categoria) {
+            throw new BadRequestException(
+                'Categoria no ha sido encontrada'
+            )
+        }
+
+        const ultimoRegistro = await this.subCategoriaRepository.find({
+            where: { idCategoria: categoria?.idCategoria },
+            order: {
+                idSubCategoria: "DESC"
+            },
+            take: 1
+        })
+
+        if (ultimoRegistro.length > 0) {
+            const [code, num] = ultimoRegistro[0].codigoSubCategoria.split("_")
+            const next = (parseInt(num, 10) + 1).toString().padStart(num.length, "0")
+            codigo = `${code}_${next}`;
+        } else {
+            codigo = `${categoria.codigoSubCategoria}_0001`
+        }
+
+        return codigo
     }
 }

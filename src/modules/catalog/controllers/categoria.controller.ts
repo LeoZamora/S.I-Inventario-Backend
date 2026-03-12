@@ -4,12 +4,14 @@ import {
     Post,
     Body,
     Res,
-    HttpStatus
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Put
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiBody } from "@nestjs/swagger";
-import { Response } from "express";
+import { ApiTags, ApiOperation, ApiBody, ApiParam } from "@nestjs/swagger";
 import { CategoriaServices } from "../services/categoria.service";
-import { categoriaDTO, subCategoriaDTO } from "../dtos/categorias.dto";
+import { categoriaDTO, subCategoriaDTO, editSubCategoriaDTO } from "../dtos/categorias.dto";
 
 @Controller('categoria')
 @ApiTags('Categorias')
@@ -60,5 +62,28 @@ export class CategoriaController {
         @Body() categoria: subCategoriaDTO,
     ) {
         return await this.categoriaServices.createSubCategoria(categoria)
+    }
+
+    @Put('/sub-categoria/:idSubCategoria')
+    @ApiOperation({ summary: 'editar de subCategoria', })
+    @ApiBody({
+        type: editSubCategoriaDTO
+    })
+    async editSubCategoria(
+        @Param('idSubCategoria', ParseIntPipe) idSubCategoria: number,
+        @Body() subCategoria: editSubCategoriaDTO,
+    ) {
+        return await this.categoriaServices.editSubCategoria(
+            idSubCategoria,
+            subCategoria
+        )
+    }
+
+    @Get('/sub-categoria/codigo/:idCategoria')
+    @ApiOperation({ summary: 'Obtener codigo para subcategorias' })
+    async getCodigoSubCat(
+        @Param('idCategoria', ParseIntPipe) idCategoria: number
+    ) {
+        return (await this.categoriaServices.getCodigoSubCategoria(idCategoria))
     }
 }

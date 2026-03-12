@@ -31,9 +31,17 @@ export class SubCategoria {
   @Field()
   codigoSubCategoria: string;
 
+  @Column("varchar", { name: "codigoProducto", length: 50 })
+  @Field()
+  codigoProducto: string;
+
   @Column("varchar", { name: "descripcion", nullable: true, length: 300 })
   @Field(type => String, { nullable: true })
   descripcion: string | null;
+
+  @Column('bit',  { name: 'estado', default: () => "1" })
+  @Field(type => Int)
+  estado: number
 
   @Column("datetime2", { name: "fechaRegistro", default: () => "getdate()" })
   @Field(type => Date)

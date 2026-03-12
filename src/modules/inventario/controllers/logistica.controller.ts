@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { LogisticaServices } from "../services/logistica.service";
 import { ApiTags, ApiOperation, ApiBody } from "@nestjs/swagger";
 import { bodegaDTO, ubicacionDTO } from "../dtos/logistica.dto";
@@ -33,6 +33,13 @@ export class LogisticaController {
         return (await this.logisticaServices.createUbicacion(ubicacion))
     }
 
+    @Get('/ubicacion/codigo-recomendado')
+    @ApiOperation({ summary: 'Obtener codigo para ubicaciones' })
+    async getCodigoUbicacion(
+    ) {
+        return (await this.logisticaServices.getCodigoUbicacion())
+    }
+
     // BODEGAS CONTROLLERS
     @Get('/bodega')
     @ApiOperation({ summary: 'Obtener todas las bodegas' })
@@ -55,4 +62,13 @@ export class LogisticaController {
     ) {
         return (await this.logisticaServices.createBodega(bodega))
     }
+
+    @Get('/bodega/codigo-recomendado')
+    @ApiOperation({ summary: 'Obtener codigo para bodegas' })
+    async getCodigoBodegas(
+        // @Param('idUbicacion') idUbicacion: number
+    ) {
+        return (await this.logisticaServices.getCodigoBodega())
+    }
+
 }

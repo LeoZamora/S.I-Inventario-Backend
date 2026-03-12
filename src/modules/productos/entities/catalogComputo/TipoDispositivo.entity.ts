@@ -28,6 +28,14 @@ export class TipoDispositivo {
   @Field(type => Date)
   fechaRegistro: Date;
 
+  @Column("varchar", { name: "usuarioRegistro", length: 50 })
+  @Field(type => String)
+  usuarioRegistro: string;
+
+  @Column("bit", { name: "estado", default: () => "1" })
+  @Field(type => Int)
+  estado: number;
+
   @OneToMany(
     () => EquiposComputo,
     (equiposComputo) => equiposComputo.idTipoDispositivo2
